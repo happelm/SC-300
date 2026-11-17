@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entra SPA Demo – SC-300 Lab 3.2</title>
+<script src="https://alcdn.msauth.net/browser/2.38.0/js/msal-browser.min.js"></script>
+<style>
+  :root { --ink:#1b1b1f; --muted:#6b6f76; --line:#d9dbe0; --accent:#0f6cbd; --bg:#f7f8fa; --ok:#107c10; --err:#c50f1f; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:16px/1.5 "Segoe UI", system-ui, sans-serif; color:var(--ink); background:var(--bg); }
+  header { padding:24px 32px; border-bottom:1px solid var(--line); background:#fff; display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; }
+  h1 { margin:0; font-size:20px; }
+  h1 small { display:block; font-weight:400; color:var(--muted); font-size:14px; }
+  main { padding:24px 32px; display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  @media (max-width:900px){ main{grid-template-columns:1fr;} }
+  section { background:#fff; border:1px solid var(--line); border-radius:8px; padding:20px; }
+  section h2 { margin:0 0 12px; font-size:15px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
+  button { padding:9px 16px; border:1px solid var(--accent); border-radius:6px; background:var(--accent); color:#fff; font:inherit; cursor:pointer; }
+  button.secondary { background:#fff; color:var(--accent); }
+  button:disabled { opacity:.4; cursor:not-allowed; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
+  label { display:block; font-weight:600; margin:12px 0 4px; }
+  input[type=text] { width:100%; padding:9px; border:1px solid var(--line); border-radius:6px; font:inherit; }
+  pre { margin:0; background:#f3f4f6; padding:12px; border-radius:6px; font:13px/1.45 Consolas, monospace; white-space:pre-wrap; word-break:break-all; max-height:360px; overflow:auto; }
+  #status { color:var(--muted); font-size:14px; }
+  .ok { color:var(--ok); } .err { color:var(--err); }
+  .claim b { color:var(--accent); }
+  .hint { font-size:13px; color:var(--muted); margin:0 0 12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Entra SPA Demo <small>Auth Code + PKCE · Delegated permissions · Microsoft Graph</small></h1>
+  <div class="row" style="margin:0">
+    <button id="loginBtn">Sign in</button>
+    <button id="logoutBtn" class="secondary" disabled>Sign out</button>
+  </div>
+</header>
+<main>
+  <section>
+    <h2>Profile (GET /me)</h2>
+    <p id="status">Not signed in.</p>
+    <div class="row">
+      <button id="profileBtn" disabled>Load profile</button>
+    </div>
+    <label for="mobileInput">mobilePhone (user-editable attribute)</label>
+    <input type="text" id="mobileInput" placeholder="+43 …" disabled>
+    <div class="row" style="margin-top:10px">
+      <button id="saveBtn" disabled>Save mobilePhone (PATCH /me)</button>
+      <button id="jobTitleBtn" class="secondary" disabled>Try PATCH jobTitle (expect 403)</button>
+    </div>
+    <pre id="profileOut">–</pre>
+  </section>
+  <section>
+    <h2>Access token</h2>
+    <p class="hint">Claims decoded client-side. <b>scp</b> = delegated scopes, <b>aud</b> = target API, <b>tid</b> = tenant, <b>appid</b> = this app.</p>
+    <div class="row">
+      <button id="tokenBtn" disabled>Show token claims</button>
+      <button id="copyTokenBtn" class="secondary" disabled>Copy raw token (for jwt.ms)</button>
+    </div>
+    <pre id="tokenOut">–</pre>
+  </section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

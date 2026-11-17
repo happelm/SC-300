@@ -1,0 +1,9 @@
+title: SC-300 Lab Instructions
+description: Microsoft Identity and Access Administrator – lab instructions and trainer playbook
+theme: jekyll-theme-primer
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+exclude:
+  - README.md
