@@ -49,6 +49,9 @@ title: 'Appendix – Conventions, objects, error codes'
 | `AADSTS7000215` | Invalid client secret | The Secret **ID** was used instead of the **Value** (Lab 3.5) |
 | `AADSTS9002326` | Cross-origin token redemption only for SPA | Redirect URI registered under **Web** instead of **Single-page application** (Lab 3.2) |
 | `AADSTS500011` | Resource principal not found | Wrong application ID URI – often the client ID of the client app instead of the API |
+| `invalid_scope` | The scope is not valid for this flow | Client credentials with a single permission instead of `<resource>/.default` (Lab 3.5) |
+| `AADSTS700213` | No matching federated identity record for the subject | Workload identity federation: subject differs – branch, environment, or upper/lower case |
+| Token without `roles` | – | Admin consent for the application permission is missing; Entra still issues the token, the API rejects the call (Lab 3.5) |
 | HTTP 403 `Authorization_RequestDenied` | Insufficient privileges | Delegated call for an attribute the user may not change (Lab 3.1) |
 | HTTP 204 | No content | **Success** of a `PATCH` – the body is empty on purpose |
 

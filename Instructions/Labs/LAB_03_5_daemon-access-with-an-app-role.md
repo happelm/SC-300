@@ -17,6 +17,12 @@ lab:
 
 Requires Lab 3.3.
 
+### How it works
+
+In the client credentials flow the app proves its identity directly with its own credential – there is no sign-in page and no user. Entra checks the credential, looks up which application permissions an admin has granted to this service principal on the requested resource, and writes them into the `roles` claim. The request names the resource with `/.default` instead of single permissions: nobody is there to be asked at runtime, so everything was decided beforehand, at admin consent, from what the app registration declares under **API permissions**.
+
+The credential is the whole security of a daemon. A secret is sent with every request and works from any machine that has a copy. A certificate never leaves its machine: the script signs a short, time-limited assertion with the private key, and only that assertion travels. Part D shows the switch.
+
 ### Part A – Identity and credential
 
 1. **App registrations → + New registration** – `Employee Sync`, single tenant, no redirect URI. Note the client ID.

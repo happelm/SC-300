@@ -17,6 +17,18 @@ lab:
 
 **Scenario:** HR publishes an Employee API. Employees read their own record through a client app. A nightly sync service reads all records without a signed-in user.
 
+**The chain of Labs 3.3–3.6:** Each lab uses the result of the one before. Every lab runs the same four steps – *configure* an object in the admin center, *consent* (configuration alone grants nothing), *get a token* with a short script, *prove it* by reading the claims. The scripts call the Entra endpoints with plain HTTP and no library, so every parameter stays visible. For a production app it is the other way round: use MSAL, which handles token cache, renewal and errors. Some steps end in an error on purpose – Entra error codes are precise, and recognizing them later saves more time than any successful click.
+
+### How it works
+
+An API cannot sensibly decide by itself who may call it – every API would need its own user management. Instead the API **declares** which permissions exist and leaves issuing and checking to Entra ID. Three building blocks, three jobs:
+
+- The **application ID URI** names the API. Entra writes it into the `aud` claim, so the API can tell that a token was issued for it and not for another service.
+- A **scope** describes what an app may do *on behalf of a signed-in user*. *Who can consent* decides whether the user may grant it or only an admin.
+- An **app role** for applications describes what an app may do *without any user*. There is nobody who could consent, so admin consent is mandatory.
+
+The value is in the cut: not one blanket "access to the Employee API", but separate permissions for reading and writing – and for writing every record one that a user cannot grant themselves. Each client later gets exactly what it needs. Background: [Concepts, section 5](../Concepts.html).
+
 1. **App registrations → + New registration** – name `Employee API`, single tenant, **no** redirect URI. An API validates tokens; it never receives a sign-in. Note the client ID.
 
 2. **Expose an API → Application ID URI → Add** – keep `api://<client-id>` → **Save**. This value becomes the `aud` claim of every token issued for this API.

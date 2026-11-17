@@ -17,6 +17,12 @@ lab:
 
 Requires Lab 3.3.
 
+### How it works
+
+The client asks for a specific scope during sign-in. Entra checks whether consent exists – from the user, or from an admin for everyone – and if so writes the scope into the `scp` claim. The token is issued for the API from Lab 3.3, visible in `aud`; a Graph token would be worthless there. The user is in the token too (`upn`, `oid`), so the API can apply its own rules on top: scope ∩ what this user may do.
+
+The lab uses device code flow because it needs no redirect URI, no web server and no library, and still runs a real interactive sign-in with MFA and Conditional Access. That makes the protocol visible: the long `device_code` stays in the script, the short `user_code` goes to the person, and the script polls `/token` until the sign-in is done.
+
 1. **App registrations → + New registration** – `Employee Client`, single tenant, no redirect URI. Note the client ID.
 
 2. **Authentication → Advanced settings → Allow public client flows → Yes → Save.** The script uses device code flow, which needs a public client. Without this switch the token request fails with `AADSTS7000218`.

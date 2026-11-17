@@ -140,6 +140,18 @@ Then the client type question: *can this app keep a secret from the person runni
    - Message: this is free and is what every pipeline that still uses a stored secret should move to. For Azure resources the `azure/login` action does the same two calls.
 5. *Error messages with AI* – paste an `AADSTS` error into Claude and let it explain cause and fix; then verify against the error code reference. Good moment for "AI as sparring partner, not oracle": ask it to generate a Graph script with permission GUIDs and check the GUIDs with `Find-MgGraphPermission`.
 
+**Day 3 labs and the skills outline** – useful when someone asks why we leave the Microsoft lab guide:
+
+| Objective (Plan and implement workload identities) | Covered in |
+|---|---|
+| Plan for app registrations | Concepts 1–2, Lab 3.3 |
+| Create app registrations | Labs 3.2, 3.3, 3.4, 3.5 |
+| Configure app authentication | Lab 3.2 (SPA, PKCE), 3.4 (public client), 3.5 (secret, certificate), WIF demo |
+| Configure API permissions | Labs 3.1, 3.2, 3.4, 3.5 |
+| Create app roles | Lab 3.3, 3.5 |
+| Configure and manage user and admin consent | Labs 3.2, 3.4, 3.7 |
+| Assign Microsoft Entra roles to manage enterprise applications | Lab 3.6 |
+
 **Known issues**
 
 - `aboutMe`, `skills`, `interests` are SharePoint user profile attributes, not directory attributes – they often fail on `v1.0` for reasons that have nothing to do with permissions. Use `mobilePhone` for write tests.

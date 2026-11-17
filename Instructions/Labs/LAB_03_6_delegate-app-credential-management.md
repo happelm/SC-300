@@ -17,6 +17,12 @@ lab:
 
 Requires Lab 3.5 including Part D.
 
+### How it works
+
+A custom role is a list of allowed operations – it does nothing until it is assigned, and the **place** of the assignment decides its reach. Assigned under **Roles & admins**, it applies to the whole directory. Assigned inside an app registration, it applies to that one object only. That is why Part A ends with four tests: an allowed operation, an operation outside the role, another object, and a setting that is not controlled by roles at all.
+
+An application management policy works on a different axis: not *who* may change credentials, but *which kind* of credential may exist – for every person, admins included. Role and policy together give least privilege for people and for credentials.
+
 ### Part A – Delegate with a custom role
 
 1. **Entra ID → Roles & admins → Roles & admins → + New custom role**:
