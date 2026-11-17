@@ -60,6 +60,8 @@
       {% endfor %}
       <h4>Reference</h4>
       <ul>
+        {% assign concepts = site.pages | where_exp: "p", "p.path == 'Instructions/Concepts.md'" | first %}
+        {% if concepts %}<li><a href="{{ concepts.url | relative_url }}"{% if concepts.url == page.url %} class="active"{% endif %}>Concepts</a></li>{% endif %}
         {% if appendix %}<li><a href="{{ appendix.url | relative_url }}"{% if appendix.url == page.url %} class="active"{% endif %}>Appendix</a></li>{% endif %}
         {% assign playbook = site.pages | where_exp: "p", "p.path == 'Trainer/Playbook.md'" | first %}
         {% if playbook %}<li><a href="{{ playbook.url | relative_url }}"{% if playbook.url == page.url %} class="active"{% endif %}>Trainer playbook</a></li>{% endif %}

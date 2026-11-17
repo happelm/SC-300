@@ -111,7 +111,9 @@ Not covered by any Microsoft lab although in the skills outline: Temporary Acces
 
 This is the day where most uncertainty sits. The labs form one chain – keep the order.
 
-**Flow:** application object vs. service principal → delegated permissions in Graph Explorer (3.1) → own SPA (3.2) → own API (3.3) → delegated client (3.4) → daemon with app role (3.5) → credential delegation (3.6) → consent (3.7) → Defender for Cloud Apps.
+**Flow:** application object vs. service principal → delegated permissions in Graph Explorer (3.1) → own SPA (3.2) → own API (3.3) → delegated client (3.4) → daemon with app role, secret then certificate (3.5) → credential delegation and application management policy (3.6) → workload identity federation (demo) → consent (3.7) → Defender for Cloud Apps.
+
+The reference for participants is [Concepts](../Instructions/Concepts.html) – point to its sections instead of repeating slides.
 
 **Whiteboard first**
 
@@ -128,7 +130,15 @@ Then the client type question: *can this app keep a secret from the person runni
 1. *Same token, different app* – decode a Graph Explorer token (3.1) and a token from the own SPA (3.2) side by side: `aud` and `scp` identical, `appid` different.
 2. *Dynamic consent* – show the SPA working with an **empty** API permissions blade, then show the grant under **Enterprise apps → Permissions**. `requiredResourceAccess` is a declaration; the `oauth2PermissionGrant` on the service principal is the permission. Then show where the declaration is mandatory: `/.default` in Lab 3.5.
 3. *The jobTitle 403* – same call as standard user (403) and as User Administrator (204). Delegated = scope ∩ user rights.
-4. *Error messages with AI* – paste an `AADSTS` error into Claude and let it explain cause and fix; then verify against the error code reference. Good moment for "AI as sparring partner, not oracle": ask it to generate a Graph script with permission GUIDs and check the GUIDs with `Find-MgGraphPermission`.
+4. *Workload identity federation – the credential nobody has to store* (after Lab 3.5, ~15 min). Runs from a separate demo repository in your own GitHub account; participants need no GitHub account and only watch.
+   - App registration `Employee Sync WIF` with the Graph application permission `User.Read.All` and admin consent.
+   - **Certificates & secrets → Federated credentials → + Add credential → GitHub Actions deploying Azure resources**: organization, repository, entity **Branch**, `main`. Show the generated subject `repo:<owner>/<repo>:ref:refs/heads/main` and the audience `api://AzureADTokenExchange`.
+   - Copy [`wif-demo.yml`](https://github.com/happelm/SC-300/blob/main/Trainer/wif-demo.yml) to `.github/workflows/` of the demo repository, set the three repository variables, run it with **Run workflow**.
+   - Step 1 prints the GitHub token: `iss` is GitHub, `sub` is exactly the subject from the federated credential. Step 2 sends that token as `client_assertion` to the same `/token` endpoint as the client credentials script – and gets an Entra token with `roles`. No secret in the repo, nothing to rotate.
+   - Break it on purpose: run the workflow from another branch – `AADSTS700213` (no matching federated identity record). The subject is the trust boundary.
+   - Two traps: the subject is matched **case-sensitively** (`repo:Happelm/…` ≠ `repo:happelm/…`), and a freshly added federated credential can take a few minutes to replicate – the first run may fail with `AADSTS70021`. Set it up before the session.
+   - Message: this is free and is what every pipeline that still uses a stored secret should move to. For Azure resources the `azure/login` action does the same two calls.
+5. *Error messages with AI* – paste an `AADSTS` error into Claude and let it explain cause and fix; then verify against the error code reference. Good moment for "AI as sparring partner, not oracle": ask it to generate a Graph script with permission GUIDs and check the GUIDs with `Find-MgGraphPermission`.
 
 **Known issues**
 
@@ -136,6 +146,8 @@ Then the client type question: *can this app keep a secret from the person runni
 - `AADSTS9002326` (*cross-origin token redemption is permitted only for the Single-Page Application client type*) – the redirect URI is under **Web** instead of **SPA**. Shows up the moment someone publishes the SPA behind Application Proxy and adds the new URL to the wrong platform.
 - `npx serve` fails with *could not determine executable to run* on fresh Node installs – install `serve` globally.
 - The SPA demo shows a clear message for the usual setup errors (placeholder IDs, `file://`, MSAL not loaded). If a participant reports "nothing happens on sign-in", open the browser console.
+- `Update-MgUser` with the application permission `User.ReadWrite.All` fails with 403 for users that hold admin roles – make sure test user B has no role assignment left (Lab 3.5, Part D).
+- The application management policy in Lab 3.6 also blocks admins. It is scoped to `Employee Sync` on purpose; a tenant-wide *Block password addition* would break Lab 3.5 Part B for everyone who runs it later.
 - Admin consent workflow takes up to an hour to become active after enabling it – enable it before lunch, use it after.
 
 ## Day 4 – Governance and monitoring

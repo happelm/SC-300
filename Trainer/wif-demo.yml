@@ -1,0 +1,61 @@
+# Trainer demo: workload identity federation from GitHub Actions to Microsoft Entra ID
+#
+# Copy this file to .github/workflows/wif-demo.yml in a SEPARATE demo repository
+# (not in the SC-300 lab repo). Add three repository variables under
+# Settings -> Secrets and variables -> Actions -> Variables:
+#   ENTRA_TENANT_ID   tenant ID
+#   ENTRA_CLIENT_ID   client ID of the app registration with the federated credential
+#   ENTRA_SCOPE       e.g. https://graph.microsoft.com/.default
+# Variables, not secrets: nothing here is secret. That is the point of the demo.
+#
+# Federated credential on the app registration
+# (Certificates & secrets -> Federated credentials -> + Add credential -> GitHub Actions):
+#   Issuer    https://token.actions.githubusercontent.com
+#   Subject   repo:<owner>/<repo>:ref:refs/heads/main
+#   Audience  api://AzureADTokenExchange
+#
+# The workflow uses no Azure action and needs no Azure subscription: it shows the two
+# HTTP calls of the token exchange directly.
+
+name: wif-demo
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write   # allows the job to request an OIDC token from GitHub
+  contents: read
+
+jobs:
+  exchange:
+    runs-on: ubuntu-latest
+    env:
+      # decodes the payload of a JWT (Base64URL without padding)
+      JWT_PAYLOAD: 'p=$(echo "$1" | cut -d. -f2 | tr "_-" "/+"); while [ $(( ${#p} % 4 )) -ne 0 ]; do p="$p="; done; echo "$p" | base64 -d'
+    steps:
+      - name: 1 - Get a token from GitHub
+        run: |
+          GH_TOKEN=$(curl -sS -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=api://AzureADTokenExchange" | jq -r .value)
+          echo "::add-mask::$GH_TOKEN"
+          echo "GH_TOKEN=$GH_TOKEN" >> "$GITHUB_ENV"
+          echo "GitHub token claims (issuer, subject, audience):"
+          bash -c "$JWT_PAYLOAD" _ "$GH_TOKEN" | jq '{iss, sub, aud, repository, ref}'
+
+      - name: 2 - Exchange it for an Entra token (no secret anywhere)
+        run: |
+          RESPONSE=$(curl -sS -X POST \
+            "https://login.microsoftonline.com/${{ vars.ENTRA_TENANT_ID }}/oauth2/v2.0/token" \
+            -d "client_id=${{ vars.ENTRA_CLIENT_ID }}" \
+            -d "grant_type=client_credentials" \
+            -d "scope=${{ vars.ENTRA_SCOPE }}" \
+            -d "client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer" \
+            --data-urlencode "client_assertion=$GH_TOKEN")
+          if echo "$RESPONSE" | jq -e .error >/dev/null; then
+            echo "$RESPONSE" | jq '{error, error_description}'
+            exit 1
+          fi
+          ENTRA_TOKEN=$(echo "$RESPONSE" | jq -r .access_token)
+          echo "::add-mask::$ENTRA_TOKEN"
+          echo "Entra token claims:"
+          bash -c "$JWT_PAYLOAD" _ "$ENTRA_TOKEN" | jq '{aud, appid, roles, tid, idtyp}'

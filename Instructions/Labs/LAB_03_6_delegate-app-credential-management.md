@@ -7,15 +7,17 @@ lab:
 
 # Lab 3.6 – Delegate app credential management with a custom role
 
-**Estimated time:** 25 minutes
+**Estimated time:** 40 minutes
 
 > **Draft:** This lab is new and has not been run in this environment yet. If a step behaves differently, tell the trainer.
 
-**Goal:** Test user B can renew the secret of **Employee Sync** – and nothing else: no permissions, no other app.
+**Goal:** Test user B can renew the credentials of **Employee Sync** – and nothing else: no permissions, no other app. Then an application management policy makes sure that renewal can only be a certificate.
 
 **Why:** The secret from Lab 3.5 expires. The person who renews it is usually the app owner, not the identity team. The common shortcuts are both bad: the business waits for an admin every time, or someone gets *Application Administrator*, which manages **every** app in the tenant. A custom role assigned on one app registration solves both. Microsoft lab 19 creates a custom role but never assigns or tests it – and picks permissions for password SSO and provisioning secrets, not for app credentials.
 
-Requires Lab 3.5.
+Requires Lab 3.5 including Part D.
+
+### Part A – Delegate with a custom role
 
 1. **Entra ID → Roles & admins → Roles & admins → + New custom role**:
 
@@ -43,12 +45,34 @@ Requires Lab 3.5.
 
    The `App Credential Manager` assignment has `directoryScopeId` `/{object ID of Employee Sync}` – the object ID of the app registration, not its client ID.
 
+### Part B – Allow certificates only
+
+The role decides **who** may manage credentials. An application management policy decides **what kind** of credential is allowed at all – for everyone, admins included.
+
+5. As admin: **Entra ID → Enterprise apps → Application policies** → **Block password addition**:
+
+   | Setting | Value |
+   |---|---|
+   | Status | **On** |
+   | Applies to | **Select applications** → `Employee Sync` |
+
+   **Save.** Applying it to one app keeps the rest of the tenant – and the other labs – unaffected.
+
+6. As test user B: **Employee Sync → Certificates & secrets → + New client secret**. The secret is refused with a message that a policy blocks it.
+
+7. As test user B: **Certificates → Upload certificate** – use `EmployeeSync.cer` from Lab 3.5 (copy it from the admin desktop or export the public key again). The upload works.
+
+8. As admin, try step 6 yourself – the policy applies to you too.
+
 ### Checkpoint
 
-- [ ] Test user B created a secret on `Employee Sync`
+- [ ] Test user B created a secret on `Employee Sync` before the policy
 - [ ] Test user B could not add permissions and could not touch `Employee API`
-- [ ] Graph shows the assignment scoped to the application object
+- [ ] Graph shows the role assignment scoped to the application object
+- [ ] After the policy, nobody could add a secret to `Employee Sync`, but a certificate upload worked
 
 **Note:** The application owner (**Owners** blade) could also manage credentials – and everything else on the app, including its permissions. The custom role is narrower than ownership.
+
+**Why the policy and the role belong together:** The custom role is least privilege for people, the policy is least privilege for credentials. Without the policy, test user B could still create a two-year secret and paste it into a script. Tenant-wide, the same blade can cap secret and certificate lifetime or block secrets for all apps created after a date – the usual way to phase secrets out without breaking existing apps.
 
 **Why the place of assignment matters:** A custom role is a list of operations; it does nothing until it is assigned, and the place of assignment decides the reach. Assigned under **Roles & admins** it applies to the whole directory; assigned inside an app registration it applies to that app only.

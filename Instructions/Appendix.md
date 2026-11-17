@@ -25,8 +25,9 @@ title: 'Appendix – Conventions, objects, error codes'
 | `SC300 SPA Demo` | App registration (SPA) | 3.2 | 3.7 |
 | `Employee API` | App registration (resource) | 3.3 | 3.4, 3.5, 3.6 |
 | `Employee Client` | App registration (public client) | 3.4 | – |
-| `Employee Sync` | App registration (daemon) | 3.5 | 3.6, 4.2 |
+| `Employee Sync` | App registration (daemon) – secret, certificate `CN=Employee Sync`, Graph `User.ReadWrite.All` | 3.5 | 3.6, 4.2 |
 | `App Credential Manager` | Custom role | 3.6 | – |
+| *Block password addition* for `Employee Sync` | Application management policy | 3.6 | – |
 | `SC300 Consent Test` | App registration (SPA) | 3.7 | – |
 
 ## Order dependencies
@@ -54,7 +55,9 @@ title: 'Appendix – Conventions, objects, error codes'
 ## Cleanup after the course
 
 1. Turn off or delete `CA201`–`CA204`.
-2. Remove protected actions, PIM settings changes and the eligible assignments.
-3. Delete the app registrations from the table above – their service principals go with them.
-4. Delete the custom role `App Credential Manager`, the groups and `AU-Sales`.
-5. Reset **User consent settings** and **Admin consent settings** to the values you noted in Lab 3.7.
+1. **Enterprise apps → Application policies** – turn **Block password addition** off or remove `Employee Sync` from it.
+1. Remove the Graph application permission `User.ReadWrite.All` from `Employee Sync` (**Enterprise apps → Employee Sync → Permissions → Revoke**) and delete the certificate from `Cert:\CurrentUser\My`.
+1. Remove protected actions, PIM settings changes and the eligible assignments.
+1. Delete the app registrations from the table above – their service principals go with them.
+1. Delete the custom role `App Credential Manager`, the groups and `AU-Sales`.
+1. Reset **User consent settings** and **Admin consent settings** to the values you noted in Lab 3.7.

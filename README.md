@@ -51,8 +51,8 @@ Delegated and application permissions, consent, app registrations, exposing an A
 | 3.2 | [Your own single-page app](Instructions/Labs/LAB_03_2_your-own-single-page-app.md) (draft) | 40 min |
 | 3.3 | [Expose your own API](Instructions/Labs/LAB_03_3_expose-your-own-api.md) (draft) | 25 min |
 | 3.4 | [Client app with delegated access to your API](Instructions/Labs/LAB_03_4_client-app-with-delegated-access.md) (draft) | 30 min |
-| 3.5 | [Daemon access with an app role](Instructions/Labs/LAB_03_5_daemon-access-with-an-app-role.md) (draft) | 35 min |
-| 3.6 | [Delegate app credential management with a custom role](Instructions/Labs/LAB_03_6_delegate-app-credential-management.md) (draft) | 25 min |
+| 3.5 | [Daemon access with an app role](Instructions/Labs/LAB_03_5_daemon-access-with-an-app-role.md) (draft) | 55 min |
+| 3.6 | [Delegate app credential management with a custom role](Instructions/Labs/LAB_03_6_delegate-app-credential-management.md) (draft) | 40 min |
 | 3.7 | [User consent and the admin consent workflow](Instructions/Labs/LAB_03_7_user-consent-and-the-admin-consent-workflow.md) (draft) | 30 min |
 | MS 20 | [Implement access management for apps](https://microsoftlearning.github.io/SC-300-Identity-and-Access-Administrator/Instructions/Labs/Lab_20_ImplementAccessManagementForApps.html) (Microsoft) | 10 min |
 | MS 17 | [Defender for Cloud Apps discovery and restrictions](https://microsoftlearning.github.io/SC-300-Identity-and-Access-Administrator/Instructions/Labs/Lab_17_DefenderForCloudAppsDiscoveryAndRestrictions.html) (Microsoft) | 20 min |
@@ -74,9 +74,10 @@ Entitlement management, access reviews, terms of use, PIM for roles and groups, 
 | MS 28 | [Identity Secure Score](https://microsoftlearning.github.io/SC-300-Identity-and-Access-Administrator/Instructions/Labs/Lab_28_MonitorIdentitySecureScore.html) (Microsoft) | 15 min |
 | MS 27 | [Microsoft Sentinel KQL for Entra data](https://microsoftlearning.github.io/SC-300-Identity-and-Access-Administrator/Instructions/Labs/Lab_27_MicrosoftSentinelKustoQueries.html) (Microsoft), optional – needs Azure | 30 min |
 
-## Appendix
+## Reference
 
-[Lab conventions, cleanup, error codes](Instructions/Appendix.md)
+- [Concepts – applications and workload identities](Instructions/Concepts.md) – object model, flows, credentials, permissions, APIs, tokens, hardening, abbreviations.
+- [Appendix](Instructions/Appendix.md) – lab conventions, objects, error codes, cleanup
 
 ## For trainers
 
