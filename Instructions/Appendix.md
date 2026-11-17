@@ -17,10 +17,12 @@ title: 'Appendix – Conventions, objects, error codes'
 | `AU-Sales` | Administrative unit | 1.1 | – |
 | `SC300-Passwordless` | Security group (test user A) | 2.1 | 2.3, 2.4, 4.1 |
 | `SC300-DeviceCode-Exception` | Security group, empty by default | 2.2 | 3.4, 4.1 |
-| `CA201 – Phishing-resistant MFA – SC300-Passwordless` | Conditional Access policy | 2.1 | 2.3 |
-| `CA202 – Block device code flow` | Conditional Access policy | 2.2 | 3.4, 4.1 |
-| `CA203 – Step-up c1 – phishing-resistant` | Conditional Access policy | 2.3 | 4.1 |
-| `CA204 – High user risk – secure password change` | Conditional Access policy | 2.4 | – |
+| `LAB201 – Phishing-resistant MFA – SC300-Passwordless` | Conditional Access policy | 2.1 | 2.3 |
+| `LAB202 – Block device code flow` | Conditional Access policy | 2.2 | 3.4, 4.1 |
+| `LAB203 – Step-up c1 – phishing-resistant` | Conditional Access policy | 2.3 | 4.1 |
+| `LAB204 – High user risk – secure password change` | Conditional Access policy | 2.4 | – |
+| `breakglass01` | Emergency access account (Global Administrator) | 2.5 | – |
+| `CA000`–`CA404` (31 policies), `… - Exclude` groups, `ALLOWED COUNTRIES` | Conditional Access baseline, report-only | 2.5 | 4.2 |
 | `Phishing-resistant step-up` (`c1`) | Authentication context | 2.3 | 4.1 |
 | `SC300 SPA Demo` | App registration (SPA) | 3.2 | 3.7 |
 | `Employee API` | App registration (resource) | 3.3 | 3.4, 3.5, 3.6 |
@@ -34,14 +36,15 @@ title: 'Appendix – Conventions, objects, error codes'
 
 - Lab 2.3 and 2.4 need the passkey of test user A from Lab 2.1.
 - **Before the Microsoft terms of use lab (Day 4):** remove the protected actions from Lab 2.3. Creating a terms of use page counts as a Conditional Access change and fails otherwise.
-- If `CA202` is on, device code flow for test user B needs the exception group (Lab 3.4) – or the just-in-time activation from Lab 4.1.
+- Keep the baseline from Lab 2.5 in **report-only**. Switched on, `CA205` blocks every unmanaged lab VM and `CA004` blocks the device code flow of Labs 3.4 and 4.1.
+- If `LAB202` is on, device code flow for test user B needs the exception group (Lab 3.4) – or the just-in-time activation from Lab 4.1.
 
 ## Error codes you will meet
 
 | Code | Meaning | Typical cause in these labs |
 |---|---|---|
 | `AADSTS50011` | Redirect URI mismatch | Port, trailing slash or `http`/`https` differs from the app registration (Lab 3.2) |
-| `AADSTS53003` | Blocked by Conditional Access | `CA202` blocks device code flow (Lab 2.2) |
+| `AADSTS53003` | Blocked by Conditional Access | `LAB202` blocks device code flow (Lab 2.2) |
 | `AADSTS530036` | Refresh token invalid due to authentication flow checks | Protocol tracking after a device code session (Lab 2.2) |
 | `AADSTS65001` | No consent | Admin-only scope requested by a user (Lab 3.4) or consent not granted |
 | `AADSTS700016` | Application not found in directory | Wrong client ID, or the app is in another tenant |
@@ -57,7 +60,8 @@ title: 'Appendix – Conventions, objects, error codes'
 
 ## Cleanup after the course
 
-1. Turn off or delete `CA201`–`CA204`.
+1. Turn off or delete `LAB201`–`LAB204`.
+1. Remove the baseline from Lab 2.5 with the cleanup commands at the end of that lab, then delete `breakglass01`.
 1. **Enterprise apps → Application policies** – turn **Block password addition** off or remove `Employee Sync` from it.
 1. Remove the Graph application permission `User.ReadWrite.All` from `Employee Sync` (**Enterprise apps → Employee Sync → Permissions → Revoke**) and delete the certificate from `Cert:\CurrentUser\My`.
 1. Remove protected actions, PIM settings changes and the eligible assignments.

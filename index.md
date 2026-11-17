@@ -44,6 +44,7 @@ Authentication methods and strengths, Temporary Access Pass and passkeys, SSPR, 
 | 2.2 | [Block device code flow without breaking operations](Instructions/Labs/LAB_02_2_block-device-code-flow-without-breaking-operations.html) (draft) | 35 min |
 | 2.3 | [Authentication context and protected actions](Instructions/Labs/LAB_02_3_authentication-context-and-protected-actions.html) (draft) | 35 min |
 | 2.4 | [Trigger and remediate user risk](Instructions/Labs/LAB_02_4_trigger-and-remediate-user-risk.html) (draft) | 30 min |
+| 2.5 | [Deploy a Conditional Access baseline in report-only](Instructions/Labs/LAB_02_5_deploy-a-conditional-access-baseline.html) (draft) | 50 min |
 | MS 12 | [Manage smart lockout values](https://microsoftlearning.github.io/SC-300-Identity-and-Access-Administrator/Instructions/Labs/Lab_12_ManageAzureADSmartLockoutValues.html) (Microsoft), if time permits | 10 min |
 
 ## Day 3 – Workload identities and apps

@@ -60,7 +60,7 @@ You need your phone with Microsoft Authenticator (Android 14 or later, iOS 17 or
 
    | Setting | Value |
    |---|---|
-   | Name | `CA201 – Phishing-resistant MFA – SC300-Passwordless` |
+   | Name | `LAB201 – Phishing-resistant MFA – SC300-Passwordless` |
    | Users | Include `SC300-Passwordless`; exclude your admin account |
    | Target resources | **All resources** |
    | Grant | **Require authentication strength → Phishing-resistant MFA** |
@@ -76,8 +76,8 @@ You need your phone with Microsoft Authenticator (Android 14 or later, iOS 17 or
 
 - [ ] Test user A signed in with a TAP and registered a passkey in Authenticator
 - [ ] A password sign-in of test user A is not enough – the user is asked for a stronger method
-- [ ] The passkey sign-in succeeds; the sign-in log shows the passkey and `CA201` as **Success**
+- [ ] The passkey sign-in succeeds; the sign-in log shows the passkey and `LAB201` as **Success**
 
-**Note:** Order matters. If you turn on `CA201` before the user has a passkey, the user can no longer reach the registration page: the TAP itself is not phishing-resistant. In production, combine the TAP with a policy for the user action **Register security information** that accepts a TAP.
+**Note:** Order matters. If you turn on `LAB201` before the user has a passkey, the user can no longer reach the registration page: the TAP itself is not phishing-resistant. In production, combine the TAP with a policy for the user action **Register security information** that accepts a TAP.
 
 **Why not SMS or Authenticator push:** Both can be relayed by an adversary-in-the-middle phishing page. A passkey is bound to the real sign-in domain – the phishing page cannot get a valid signature for `login.microsoftonline.com`.

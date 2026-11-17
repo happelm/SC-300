@@ -37,7 +37,7 @@ lab:
 
    | Setting | Value |
    |---|---|
-   | Name | `CA202 – Block device code flow` |
+   | Name | `LAB202 – Block device code flow` |
    | Users | Include **All users**; exclude your admin account and `SC300-DeviceCode-Exception` |
    | Target resources | Include **All resources**; exclude **Device Registration Service** |
    | Conditions → Authentication flows | **Configure: Yes**, **Device code flow** |
@@ -46,11 +46,11 @@ lab:
 
 5. Repeat step 1 (disconnect, connect with device code as test user B). It still works.
 
-6. Open the new sign-in in the log → tab **Report-only**. `CA202` shows **Report-only: Failure** – this is the evidence you take to the change board before enforcing.
+6. Open the new sign-in in the log → tab **Report-only**. `LAB202` shows **Report-only: Failure** – this is the evidence you take to the change board before enforcing.
 
 ### Part C – Enforce and except
 
-7. Set `CA202` to **On**. Repeat step 1. The sign-in is blocked – note the error code in the browser (`AADSTS53003`).
+7. Set `LAB202` to **On**. Repeat step 1. The sign-in is blocked – note the error code in the browser (`AADSTS53003`).
 
 8. Add test user B to `SC300-DeviceCode-Exception`. Wait a minute, repeat step 1. It works again.
 
@@ -59,8 +59,8 @@ lab:
 ### Checkpoint
 
 - [ ] The sign-in log filter **Authentication protocol = Device code** shows the test sign-ins
-- [ ] Report-only showed **Failure** for `CA202` before you enforced it
-- [ ] With `CA202` on, device code sign-in of test user B is blocked; as a member of the exception group it works
+- [ ] Report-only showed **Failure** for `LAB202` before you enforced it
+- [ ] With `LAB202` on, device code sign-in of test user B is blocked; as a member of the exception group it works
 
 **Note:** An exception is per account, not per tool. A user in the exception group can use device code flow for anything. Keep the group empty by default and grant membership just in time – Lab 4.1 does that with PIM for Groups.
 

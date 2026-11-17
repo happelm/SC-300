@@ -21,7 +21,7 @@ Requires Lab 2.1 (test user A has a passkey, so MFA is possible).
 
    | Setting | Value |
    |---|---|
-   | Name | `CA204 – High user risk – secure password change` |
+   | Name | `LAB204 – High user risk – secure password change` |
    | Users | Include `SC300-Passwordless`; exclude your admin account |
    | Target resources | **All resources** |
    | Conditions → User risk | **Configure: Yes**, **High** |

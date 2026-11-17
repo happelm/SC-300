@@ -89,7 +89,7 @@ Not covered by any Microsoft lab although in the skills outline: Temporary Acces
 
 ## Day 2 – Authentication and access
 
-**Flow:** methods policy → TAP and passkeys → authentication strengths → SSPR → Conditional Access (Microsoft 13) → authentication flows → authentication context and protected actions → ID Protection → Global Secure Access (demo).
+**Flow:** methods policy → TAP and passkeys → authentication strengths → SSPR → Conditional Access (Microsoft 13) → authentication flows → authentication context and protected actions → ID Protection → Conditional Access baseline in report-only (2.5) → Global Secure Access (demo).
 
 **Demos**
 
@@ -97,6 +97,8 @@ Not covered by any Microsoft lab although in the skills outline: Temporary Acces
 2. *Device code phishing in 60 seconds* – start `Invoke-DeviceCodeFlow.ps1` with the first-party Graph PowerShell client ID, hand the code to a participant, show that they sign in on the real Microsoft page and the token lands in your console. Then the Conditional Access block. Nothing explains the risk better.
 3. *Authentication context ≠ authentication strength* – one policy on screen: context is the **target**, strength is the **grant**. The question "isn't authentication context the same as authentication strength?" comes up every time.
 4. *Global Secure Access* (needs an Entra-joined Windows 11 VM with the client): enable the Microsoft traffic profile, show source IP restoration in the sign-in log, then a Conditional Access policy with the **compliant network** condition. Explain Internet Access and Private Access licensing (Entra Suite) on slides.
+
+5. *Conditional Access baseline* – before Lab 2.5, show the baseline running in your demo tenant (`Import-CABaseline.ps1` against mslab.live) and walk through the persona model and the per-policy exclusion groups. Then the report-only tab of a real sign-in. Microsoft lab 13 teaches one policy; this is what a tenant actually needs, and the naming scheme is the part participants take home.
 
 **Discussion:** Which of your production exceptions to device code flow are real? (Teams Rooms, Tunnel Gateway setup, Azure CLI on headless servers.) Which could move to workload identities?
 
@@ -106,6 +108,8 @@ Not covered by any Microsoft lab although in the skills outline: Temporary Acces
 - An authentication-flows policy that targets *All resources* also hits device registration since September 2024 – exclude **Device Registration Service**.
 - Protected actions need the policy **On**; in report-only the step-up is never satisfied and the user loops.
 - Password change as risk remediation only works for users who can do MFA.
+- Lab 2.5: `Import-CABaseline.ps1` was tested offline and against a mocked Graph only – run it once against a fresh GoDeploy tenant before the course. The baseline's CA004 has no Device Registration Service exclusion; that difference to `LAB202` is a planned discussion point, not a bug in our lab.
+- Our own lab policies are named `LAB201`–`LAB204` so they cannot be confused with the baseline's `CA201`–`CA204`.
 
 ## Day 3 – Workload identities and apps
 
@@ -192,4 +196,5 @@ Then the client type question: *can this app keep a secret from the person runni
 - [ ] Study guide checked for a new skills outline
 - [ ] Every *draft* lab run once in a hosted tenant – remove the draft banner and "(draft)" in `index.md`/`README.md` for each lab that ran
 - [ ] Demo tenant with Entra Suite or Governance trial for Lifecycle Workflows and Global Secure Access, plus an Entra-joined Windows 11 VM with the GSA client
+- [ ] `Import-CABaseline.ps1` run once against a fresh hosted tenant (Lab 2.5) and against the demo tenant
 - [ ] Graph calls in Lab 4.2 (sign-in logs, audit logs, PIM requests) run once – they are checked against the documentation only

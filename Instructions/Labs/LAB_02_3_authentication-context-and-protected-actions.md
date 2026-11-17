@@ -33,7 +33,7 @@ Requires Lab 2.1 (test user A has a passkey).
 
    | Setting | Value |
    |---|---|
-   | Name | `CA203 – Step-up c1 – phishing-resistant` |
+   | Name | `LAB203 – Step-up c1 – phishing-resistant` |
    | Users | Include `SC300-Passwordless`; exclude your admin account |
    | Target resources | **Authentication context → `Phishing-resistant step-up`** |
    | Grant | **Require authentication strength → Phishing-resistant MFA** |
@@ -60,21 +60,21 @@ Requires Lab 2.1 (test user A has a passkey).
 
 ### Part C – Test
 
-6. In the test user browser, sign in as test user A at `https://entra.microsoft.com` (with the passkey – `CA201` from Lab 2.1 requires it). The user is now strongly authenticated.
+6. In the test user browser, sign in as test user A at `https://entra.microsoft.com` (with the passkey – `LAB201` from Lab 2.1 requires it). The user is now strongly authenticated.
 
-7. **Conditional Access → Policies** → open `CA202`. Editing is disabled and a note at the bottom asks you to reauthenticate. Select it and sign in with the passkey.
+7. **Conditional Access → Policies** → open `LAB202`. Editing is disabled and a note at the bottom asks you to reauthenticate. Select it and sign in with the passkey.
 
 8. Change the policy description and save.
 
-9. As admin: sign-in logs → the step-up sign-in of test user A → **Conditional Access** tab. `CA203` was applied and the request contained authentication context `c1`.
+9. As admin: sign-in logs → the step-up sign-in of test user A → **Conditional Access** tab. `LAB203` was applied and the request contained authentication context `c1`.
 
 ### Checkpoint
 
 - [ ] Graph shows `authenticationContextId` `c1` on the delete permission
 - [ ] Test user A had to reauthenticate before editing a policy, although already signed in with a passkey
-- [ ] The sign-in log shows `CA203` applied to the step-up
+- [ ] The sign-in log shows `LAB203` applied to the step-up
 
-**Note:** The protected action applies to everyone who performs it. Your admin account is not in `CA203`, so for the admin no policy applies to `c1` and editing works. If you ever lock yourself out of the Conditional Access page, `https://aka.ms/MSALProtectedActions` opens it with a fresh step-up.
+**Note:** The protected action applies to everyone who performs it. Your admin account is not in `LAB203`, so for the admin no policy applies to `c1` and editing works. If you ever lock yourself out of the Conditional Access page, `https://aka.ms/MSALProtectedActions` opens it with a fresh step-up.
 
 **Before Day 4:** Creating a terms of use page registers it with Conditional Access and counts as a protected action. Remove the two protected actions (**Protected actions → select → Remove**) before you run the Microsoft terms of use lab, or the creation fails.
 
